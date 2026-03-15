@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = createSupabaseAdmin();
-    const resend = getResend();
+    const resend = await getResend();
 
     // Get start and end of today
     const today = new Date();

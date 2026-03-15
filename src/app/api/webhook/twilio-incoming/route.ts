@@ -1,12 +1,12 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
-import twilio from "twilio";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
-
-const VoiceResponse = twilio.twiml.VoiceResponse;
 
 export async function POST(req: NextRequest) {
   try {
+    const twilio = (await import("twilio")).default;
+    const VoiceResponse = twilio.twiml.VoiceResponse;
+
     // Parse form data from Twilio
     const formData = await req.formData();
     const body: Record<string, string> = {};

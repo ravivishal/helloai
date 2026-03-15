@@ -2,7 +2,7 @@ import { getTwilioClient } from "./client";
 
 export async function sendSMS(to: string, body: string): Promise<boolean> {
   try {
-    const client = getTwilioClient();
+    const client = await getTwilioClient();
     await client.messages.create({
       to,
       from: process.env.TWILIO_PHONE_NUMBER!,

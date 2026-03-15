@@ -1,9 +1,8 @@
-import twilio from "twilio";
+let twilioClient: any = null;
 
-let twilioClient: ReturnType<typeof twilio> | null = null;
-
-export function getTwilioClient() {
+export async function getTwilioClient() {
   if (!twilioClient) {
+    const twilio = (await import("twilio")).default;
     twilioClient = twilio(
       process.env.TWILIO_ACCOUNT_SID!,
       process.env.TWILIO_AUTH_TOKEN!

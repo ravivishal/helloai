@@ -1,9 +1,8 @@
-import { Resend } from "resend";
+let resendClient: any = null;
 
-let resendClient: Resend | null = null;
-
-export function getResend(): Resend {
+export async function getResend() {
   if (!resendClient) {
+    const { Resend } = await import("resend");
     resendClient = new Resend(process.env.RESEND_API_KEY!);
   }
   return resendClient;
@@ -19,7 +18,7 @@ export async function sendCallSummaryEmail(
   callDetailUrl: string
 ): Promise<boolean> {
   try {
-    const resend = getResend();
+    const resend = await getResend();
     const urgencyEmoji =
       urgency === "emergency"
         ? "🚨"

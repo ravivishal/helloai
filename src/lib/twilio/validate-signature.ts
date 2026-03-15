@@ -1,10 +1,9 @@
-import twilio from "twilio";
-
-export function validateTwilioSignature(
+export async function validateTwilioSignature(
   url: string,
   params: Record<string, string>,
   signature: string
-): boolean {
+): Promise<boolean> {
+  const twilio = (await import("twilio")).default;
   return twilio.validateRequest(
     process.env.TWILIO_AUTH_TOKEN!,
     signature,

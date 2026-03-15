@@ -4,7 +4,7 @@ export async function buyPhoneNumber(areaCode?: string): Promise<{
   phoneNumber: string;
   sid: string;
 }> {
-  const client = getTwilioClient();
+  const client = await getTwilioClient();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL!;
 
   const searchParams: Record<string, unknown> = {
