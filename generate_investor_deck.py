@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MissedCall.ai - Investor Deck PDF Generator using ReportLab"""
+"""hello.ai - Investor Deck PDF Generator using ReportLab"""
 
 import os
 from reportlab.lib.pagesizes import landscape, A4
@@ -10,7 +10,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 
-OUTPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "MissedCall_AI_Investor_Deck.pdf")
+OUTPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hello_ai_Investor_Deck.pdf")
 W, H = landscape(A4)
 
 # Colors
@@ -67,7 +67,7 @@ def footer(c):
     c.saveState()
     c.setFont("Helvetica", 7)
     c.setFillColor(GRAY)
-    c.drawCentredString(W/2, 8*mm, f"MissedCall.ai  |  Confidential  |  Slide {slide_num}")
+    c.drawCentredString(W/2, 8*mm, f"hello.ai  |  Confidential  |  Slide {slide_num}")
     c.restoreState()
 
 def draw_text(c, text, x, y, size=12, color=TEXT_BLACK, font="Helvetica", align="left"):
@@ -106,8 +106,8 @@ def subheading(c, text, x, y, size=12, color=GRAY):
 # ======================================================================
 def build():
     c = canvas.Canvas(OUTPUT, pagesize=landscape(A4))
-    c.setTitle("MissedCall.ai - Investor Presentation")
-    c.setAuthor("MissedCall.ai")
+    c.setTitle("hello.ai - Investor Presentation")
+    c.setAuthor("hello.ai")
 
     # ==================================================================
     # SLIDE 1: COVER
@@ -123,7 +123,7 @@ def build():
     draw_text(c, "MC", W/2, H - 59*mm, size=16, color=white, font="Helvetica-Bold", align="center")
 
     # Title
-    draw_text(c, "MissedCall.ai", W/2, H - 85*mm, size=42, color=white, font="Helvetica-Bold", align="center")
+    draw_text(c, "hello.ai", W/2, H - 85*mm, size=42, color=white, font="Helvetica-Bold", align="center")
     draw_text(c, "AI-Powered Receptionist for Local Businesses", W/2, H - 98*mm, size=18, color=SLATE, align="center")
 
     # Divider
@@ -198,7 +198,7 @@ def build():
     c.setFillColor(BLUE)
     c.rect(25*mm, H - 25*mm, 40*mm, 0.8*mm, fill=1, stroke=0)
 
-    draw_text(c, "MissedCall.ai gives every local business an AI-powered phone receptionist that answers calls 24/7,", 25*mm, H - 35*mm, size=11, color=GRAY)
+    draw_text(c, "hello.ai gives every local business an AI-powered phone receptionist that answers calls 24/7,", 25*mm, H - 35*mm, size=11, color=GRAY)
     draw_text(c, "has natural conversations, books appointments, and sends instant SMS & email summaries to the owner.", 25*mm, H - 43*mm, size=11, color=GRAY)
 
     # 6 capability cards (2 rows x 3 cols)
@@ -495,7 +495,7 @@ def build():
     c.setFillColor(BLUE)
     c.rect(25*mm, H - 25*mm, 40*mm, 0.8*mm, fill=1, stroke=0)
 
-    headers = ["Feature", "MissedCall.ai", "Ruby Receptionists", "Smith.ai", "Answering Svc"]
+    headers = ["Feature", "hello.ai", "Ruby Receptionists", "Smith.ai", "Answering Svc"]
     col_widths = [52*mm, 47*mm, 47*mm, 47*mm, 47*mm]
     tx = 25*mm
     ty = H - 38*mm
@@ -846,7 +846,7 @@ def build():
     draw_circle(c, W/2, H - 45*mm, 14*mm, BLUE)
     draw_text(c, "MC", W/2, H - 49*mm, size=16, color=white, font="Helvetica-Bold", align="center")
 
-    draw_text(c, "MissedCall.ai", W/2, H - 75*mm, size=36, color=white, font="Helvetica-Bold", align="center")
+    draw_text(c, "hello.ai", W/2, H - 75*mm, size=36, color=white, font="Helvetica-Bold", align="center")
     draw_text(c, "Never Lose a Customer to Voicemail Again.", W/2, H - 88*mm, size=16, color=SLATE, align="center")
 
     # Divider
@@ -867,7 +867,7 @@ def build():
     # CTA box
     draw_rounded_rect(c, W/2 - 65*mm, 25*mm, 130*mm, 22*mm, 4*mm, BLUE)
     draw_text(c, "Let's Talk", W/2, 40*mm, size=14, color=white, font="Helvetica-Bold", align="center")
-    draw_text(c, "hello@missedcall.ai  |  missedcall.ai", W/2, 32*mm, size=10, color=white, align="center")
+    draw_text(c, "hello@hello.ai  |  hello.ai", W/2, 32*mm, size=10, color=white, align="center")
 
     footer(c)
 
