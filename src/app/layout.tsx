@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "MissedCall.ai - Never Lose a Customer to Voicemail Again",
+  title: "hello.ai - Never Lose a Customer to Voicemail Again",
   description:
     "AI-powered phone receptionist for small businesses. Answer every call, book appointments, and send instant summaries — even when you can't pick up.",
   keywords: [

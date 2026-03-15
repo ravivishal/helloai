@@ -29,7 +29,7 @@ export async function sendCallSummaryEmail(
             : "🟢";
 
     await resend.emails.send({
-      from: `MissedCall.ai <notifications@missedcall.ai>`,
+      from: `hello.ai <notifications@missedcall.ai>`,
       to,
       subject: `${urgencyEmoji} New call for ${businessName}${callerName ? ` from ${callerName}` : ""}`,
       html: `
@@ -52,7 +52,7 @@ export async function sendCallSummaryEmail(
             <a href="${callDetailUrl}" style="display: block; background: #2563EB; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600;">View Full Call Details</a>
           </div>
           <div style="padding: 16px; text-align: center; color: #9ca3af; font-size: 12px;">
-            Powered by MissedCall.ai
+            Powered by hello.ai
           </div>
         </div>
       `,

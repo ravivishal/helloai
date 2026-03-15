@@ -36,7 +36,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="mb-4">
               <Link href="/" className="text-2xl font-bold text-white">
-                MissedCall.ai
+                hello.ai
               </Link>
             </div>
             <p className="text-gray-400 mb-4 max-w-sm">
@@ -148,7 +148,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-sm">
-            © {currentYear} MissedCall.ai. All rights reserved.
+            © {currentYear} hello.ai. All rights reserved.
           </p>
           <div className="flex gap-6">
             {footerLinks.legal.map((link) => (

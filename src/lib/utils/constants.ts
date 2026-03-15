@@ -1,4 +1,4 @@
-export const APP_NAME = "MissedCall.ai";
+export const APP_NAME = "hello.ai";
 export const APP_DESCRIPTION = "AI-powered phone receptionist for small businesses";
 
 export const PLAN_LIMITS = {

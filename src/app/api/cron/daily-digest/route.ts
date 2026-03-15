@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
 
       try {
         await resend.emails.send({
-          from: "MissedCall.ai <notifications@missedcall.ai>",
+          from: "hello.ai <notifications@missedcall.ai>",
           to: business.owner_email,
           subject: `Daily Digest: ${callCount} call${callCount !== 1 ? "s" : ""} for ${business.business_name}`,
           html: `
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
               </div>
 
               <div style="padding: 16px; text-align: center; color: #9ca3af; font-size: 12px;">
-                Powered by MissedCall.ai
+                Powered by hello.ai
               </div>
             </div>
           `,

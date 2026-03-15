@@ -18,7 +18,7 @@ export default function LandingPage() {
             <div className="flex items-center gap-2">
               <Phone className="h-6 w-6 text-blue-600" />
               <span className="text-xl font-bold text-gray-900">
-                MissedCall.ai
+                hello.ai
               </span>
             </div>
             <div className="hidden md:flex items-center gap-8">

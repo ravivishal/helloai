@@ -16,7 +16,7 @@ export function EmptyState() {
           Your AI receptionist is ready!
         </h3>
         <p className="text-gray-600 mb-6 max-w-md">
-          Set up call forwarding to your MissedCall.ai number to start receiving
+          Set up call forwarding to your hello.ai number to start receiving
           intelligent call summaries and never miss another opportunity.
         </p>
         <div className="space-y-3">

@@ -57,7 +57,7 @@ export default function SignUpPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 text-white flex-col justify-between p-12">
         <div className="flex items-center gap-2">
           <Phone className="h-8 w-8" />
-          <span className="text-2xl font-bold">MissedCall.ai</span>
+          <span className="text-2xl font-bold">hello.ai</span>
         </div>
         <div>
           <h1 className="text-4xl font-bold leading-tight mb-4">
@@ -93,7 +93,7 @@ export default function SignUpPage() {
           </div>
         </div>
         <p className="text-blue-200 text-sm">
-          Join 500+ businesses already using MissedCall.ai
+          Join 500+ businesses already using hello.ai
         </p>
       </div>
 
@@ -104,7 +104,7 @@ export default function SignUpPage() {
           <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
             <Phone className="h-7 w-7 text-blue-600" />
             <span className="text-xl font-bold text-gray-900">
-              MissedCall.ai
+              hello.ai
             </span>
           </div>
 

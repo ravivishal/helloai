@@ -40,7 +40,7 @@ export function Sidebar({ businessName }: SidebarProps) {
     <div className="flex h-full flex-col bg-white border-r">
       {/* Logo */}
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-blue-600">MissedCall.ai</h1>
+        <h1 className="text-2xl font-bold text-blue-600">hello.ai</h1>
       </div>
 
       <Separator />

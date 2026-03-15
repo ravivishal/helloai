@@ -57,7 +57,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Everything you need to know about MissedCall.ai
+            Everything you need to know about hello.ai
           </p>
         </div>
 
