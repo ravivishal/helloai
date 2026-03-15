@@ -5,6 +5,9 @@ import { sendSMS } from "@/lib/twilio/send-sms";
 import { sendCallSummaryEmail } from "@/lib/resend/client";
 import { VapiWebhookPayload } from "@/types";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function POST(req: NextRequest) {
   try {
     // Verify secret token from query param
