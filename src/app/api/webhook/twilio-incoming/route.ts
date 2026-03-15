@@ -92,6 +92,8 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error in twilio-incoming webhook:", error);
+    const twilio = (await import("twilio")).default;
+    const VoiceResponse = twilio.twiml.VoiceResponse;
     const twiml = new VoiceResponse();
     twiml.say("We're sorry, an error occurred. Please try again later.");
     return new NextResponse(twiml.toString(), {
