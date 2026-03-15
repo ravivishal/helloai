@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -53,17 +53,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
 
-    // Create user row in the users table
-    if (!error && data.user) {
-      const { error: insertError } = await supabase.from("users").insert({
-        auth_id: data.user.id,
-        email: email,
-        full_name: fullName || null,
-      });
-      if (insertError) {
-        console.error("Failed to create user row:", insertError);
-      }
-    }
+    // User row in the `users` table is created automatically via
+    // a Postgres trigger on auth.users (see migration_final.sql)
 
     return { error };
   };

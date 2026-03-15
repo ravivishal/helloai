@@ -12,11 +12,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { priceId, businessId } = body;
+    const { businessId } = body;
+    // Accept either a direct priceId or a plan name (starter/pro)
+    let priceId = body.priceId;
+    if (!priceId && body.plan) {
+      const planPriceMap: Record<string, string | undefined> = {
+        starter: process.env.STRIPE_STARTER_PRICE_ID,
+        pro: process.env.STRIPE_PRO_PRICE_ID,
+      };
+      priceId = planPriceMap[body.plan];
+    }
 
     if (!priceId || !businessId) {
       return NextResponse.json(
-        { error: "Missing priceId or businessId" },
+        { error: "Missing plan/priceId or businessId" },
         { status: 400 }
       );
     }
@@ -72,10 +81,12 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing?canceled=true`,
       metadata: {
-        businessId: business.id,
+        business_id: business.id,
+        user_id: user.id,
+        price_id: priceId,
       },
     });
 

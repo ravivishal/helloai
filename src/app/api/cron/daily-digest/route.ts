@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
 
       try {
         await resend.emails.send({
-          from: "hello.ai <notifications@missedcall.ai>",
+          from: "hello.ai <notifications@hello.ai>",
           to: business.owner_email,
           subject: `Daily Digest: ${callCount} call${callCount !== 1 ? "s" : ""} for ${business.business_name}`,
           html: `
@@ -139,7 +139,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       message: "Daily digests sent",
-      businesses: businessCallsMap.size,
+      businesses: Object.keys(businessCallsMap).length,
       sent: emailsSent,
     });
   } catch (error) {

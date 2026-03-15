@@ -59,16 +59,10 @@ export default function BillingPage() {
     if (!business) return;
     setUpgrading(plan);
     try {
-      const priceId =
-        plan === "starter"
-          ? process.env.NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID ||
-            "STRIPE_STARTER_PRICE_ID"
-          : process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID ||
-            "STRIPE_PRO_PRICE_ID";
       const res = await fetch("/api/stripe/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, businessId: business.id }),
+        body: JSON.stringify({ plan, businessId: business.id }),
       });
       const data = await res.json();
       if (data.url) {

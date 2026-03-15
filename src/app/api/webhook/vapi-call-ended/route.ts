@@ -134,7 +134,7 @@ Need: ${extractedData.callerNeed || "Not specified"}
 ${extractedData.summary}
 View: ${dashboardUrl}`;
 
-    const smsSent = await sendSMS(business.owner_phone, smsBody);
+    const smsSent = await sendSMS(business.owner_phone, smsBody, business.twilio_phone_number || undefined);
 
     if (smsSent) {
       console.log(`SMS sent to ${business.owner_phone}`);

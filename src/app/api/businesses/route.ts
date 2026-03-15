@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         subscription_plan: "free",
         subscription_status: "active",
         calls_used_this_month: 0,
-        calls_limit: 10,
+        calls_limit: 5,
         billing_cycle_start: new Date().toISOString(),
         is_active: true,
         setup_completed: false,

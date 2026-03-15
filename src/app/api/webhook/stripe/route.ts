@@ -6,8 +6,8 @@ import Stripe from "stripe";
 
 // Map Stripe price IDs to plan details
 const PRICE_ID_MAP: Record<string, { plan: string; calls: number }> = {
-  [process.env.STRIPE_PRICE_ID_STARTER || ""]: { plan: "starter", calls: 50 },
-  [process.env.STRIPE_PRICE_ID_PRO || ""]: { plan: "pro", calls: 200 },
+  [process.env.STRIPE_STARTER_PRICE_ID || ""]: { plan: "starter", calls: 50 },
+  [process.env.STRIPE_PRO_PRICE_ID || ""]: { plan: "pro", calls: 200 },
 };
 
 export async function POST(req: NextRequest) {

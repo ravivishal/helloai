@@ -41,7 +41,7 @@ export async function createVapiAssistant(
         "Thank you so much for calling. We'll be in touch with you shortly. Have a great day!",
       maxDurationSeconds: 300,
       silenceTimeoutSeconds: 30,
-      serverUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhook/vapi-call-ended?secret=${process.env.VAPI_API_KEY}`,
+      serverUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhook/vapi-call-ended?token=${process.env.VAPI_API_KEY}`,
     }),
   });
 

@@ -83,7 +83,7 @@ export default function FAQ() {
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Still have questions?</p>
           <a
-            href="mailto:support@missedcall.ai"
+            href="mailto:support@hello.ai"
             className="text-blue-600 hover:text-blue-700 font-semibold"
           >
             Contact our support team

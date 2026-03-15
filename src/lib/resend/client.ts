@@ -29,7 +29,7 @@ export async function sendCallSummaryEmail(
             : "🟢";
 
     await resend.emails.send({
-      from: `hello.ai <notifications@missedcall.ai>`,
+      from: `hello.ai <notifications@hello.ai>`,
       to,
       subject: `${urgencyEmoji} New call for ${businessName}${callerName ? ` from ${callerName}` : ""}`,
       html: `
