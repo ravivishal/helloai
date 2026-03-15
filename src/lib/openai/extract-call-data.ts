@@ -1,7 +1,13 @@
 import OpenAI from "openai";
 import { ExtractedCallData, TranscriptMessage } from "@/types";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+  }
+  return _openai;
+}
 
 export async function extractCallData(
   transcript: TranscriptMessage[],
@@ -12,7 +18,7 @@ export async function extractCallData(
     .join("\n");
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       messages: [
