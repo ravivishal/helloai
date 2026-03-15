@@ -234,7 +234,7 @@ export default function StepServices({
           <Label htmlFor="pricingInfo">Pricing Information (Optional)</Label>
           <Textarea
             id="pricingInfo"
-            placeholder="e.g., Service call: $85, Hourly rate: $125/hr"
+            placeholder="e.g., Service call: ₹500, Hourly rate: ₹1,000/hr"
             value={pricingInfo}
             onChange={(e) => onPricingInfoChange(e.target.value)}
             rows={3}

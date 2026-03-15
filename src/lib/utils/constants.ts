@@ -9,9 +9,11 @@ export const PLAN_LIMITS = {
 
 export const PLAN_PRICES = {
   free: 0,
-  starter: 29,
-  pro: 59,
+  starter: 999,
+  pro: 1999,
 } as const;
+
+export const CURRENCY_SYMBOL = "₹";
 
 export const CALLS_PER_PAGE = 20;
 

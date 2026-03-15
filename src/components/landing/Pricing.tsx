@@ -7,7 +7,7 @@ export default function Pricing() {
   const plans = [
     {
       name: "Free",
-      price: 0,
+      price: "0",
       description: "Perfect for trying out the service",
       callLimit: "5 calls/month",
       features: [
@@ -23,7 +23,7 @@ export default function Pricing() {
     },
     {
       name: "Starter",
-      price: 29,
+      price: "999",
       description: "Great for small businesses",
       callLimit: "50 calls/month",
       features: [
@@ -40,7 +40,7 @@ export default function Pricing() {
     },
     {
       name: "Pro",
-      price: 59,
+      price: "1,999",
       description: "For growing businesses",
       callLimit: "200 calls/month",
       features: [
@@ -97,7 +97,7 @@ export default function Pricing() {
                 </CardDescription>
                 <div className="mt-4">
                   <span className="text-5xl font-bold text-gray-900">
-                    ${plan.price}
+                    ₹{plan.price}
                   </span>
                   <span className="text-gray-600 text-lg">/month</span>
                 </div>

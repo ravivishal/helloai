@@ -74,7 +74,7 @@ export default function SignUpPage() {
               <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold">
                 ✓
               </div>
-              <span className="text-blue-100">Free plan — 5 calls/month</span>
+              <span className="text-blue-100">Free plan — 5 calls/month, ₹0</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold">

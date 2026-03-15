@@ -139,7 +139,7 @@ export default function BillingPage() {
                 </Badge>
               </CardTitle>
               <CardDescription>
-                ${PLAN_PRICES[business.subscription_plan]}/month
+                ₹{PLAN_PRICES[business.subscription_plan].toLocaleString("en-IN")}/month
               </CardDescription>
             </div>
             {business.subscription_plan !== "free" && (
@@ -190,7 +190,7 @@ export default function BillingPage() {
                 </CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold">
-                    ${PLAN_PRICES[plan]}
+                    ₹{PLAN_PRICES[plan].toLocaleString("en-IN")}
                   </span>
                   <span className="text-gray-500">/month</span>
                 </div>

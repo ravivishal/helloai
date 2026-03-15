@@ -178,8 +178,8 @@ CREATE POLICY "Users can update calls for own businesses" ON calls
 -- ==========================================
 INSERT INTO plans (name, display_name, price_cents, calls_per_month, features) VALUES
   ('free', 'Free', 0, 5, '["5 calls/month", "SMS summaries", "Call transcripts"]'),
-  ('starter', 'Starter', 2900, 50, '["50 calls/month", "SMS + email summaries", "Call transcripts", "Custom greeting"]'),
-  ('pro', 'Pro', 5900, 200, '["200 calls/month", "Everything in Starter", "Appointment booking", "Custom AI instructions", "Priority support"]');
+  ('starter', 'Starter', 99900, 50, '["50 calls/month", "SMS + email summaries", "Call transcripts", "Custom greeting"]'),
+  ('pro', 'Pro', 199900, 200, '["200 calls/month", "Everything in Starter", "Appointment booking", "Custom AI instructions", "Priority support"]');
 
 -- ==========================================
 -- Seed: business_templates
