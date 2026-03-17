@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,21 @@ import { toast } from "sonner";
 import { Save, Plus, Trash2, Phone, Calendar, Link2, Unlink } from "lucide-react";
 
 export default function SettingsPage() {
+  return (
+    <Suspense fallback={
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-8 w-48" />
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-64" />
+        ))}
+      </div>
+    }>
+      <SettingsContent />
+    </Suspense>
+  );
+}
+
+function SettingsContent() {
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
