@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,12 +27,13 @@ import { Business, FAQItem } from "@/types";
 import { DAYS_OF_WEEK } from "@/lib/utils/constants";
 import { formatPhone } from "@/lib/utils/format-phone";
 import { toast } from "sonner";
-import { Save, Plus, Trash2, Phone } from "lucide-react";
+import { Save, Plus, Trash2, Phone, Calendar, Link2, Unlink } from "lucide-react";
 
 export default function SettingsPage() {
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [connectingGoogle, setConnectingGoogle] = useState(false);
 
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
@@ -109,6 +111,58 @@ export default function SettingsPage() {
       toast.error("Failed to save settings");
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Handle Google Calendar OAuth callback params
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const googleStatus = searchParams.get("google");
+    if (googleStatus === "connected") {
+      toast.success("Google Calendar connected successfully!");
+      // Refresh business data to get updated google_calendar_connected
+      fetch("/api/businesses")
+        .then((r) => r.json())
+        .then((businesses) => {
+          if (businesses.length > 0) setBusiness(businesses[0]);
+        });
+    } else if (googleStatus === "error") {
+      toast.error("Failed to connect Google Calendar. Please try again.");
+    }
+  }, [searchParams]);
+
+  const connectGoogleCalendar = async () => {
+    if (!business) return;
+    setConnectingGoogle(true);
+    try {
+      const res = await fetch(`/api/google/connect?businessId=${business.id}`);
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to generate Google auth URL");
+      }
+    } catch {
+      toast.error("Failed to connect Google Calendar");
+    } finally {
+      setConnectingGoogle(false);
+    }
+  };
+
+  const disconnectGoogleCalendar = async () => {
+    if (!business) return;
+    try {
+      const res = await fetch("/api/google/disconnect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ businessId: business.id }),
+      });
+      if (res.ok) {
+        setBusiness({ ...business, google_calendar_connected: false, google_refresh_token: null });
+        toast.success("Google Calendar disconnected");
+      }
+    } catch {
+      toast.error("Failed to disconnect Google Calendar");
     }
   };
 
@@ -190,6 +244,47 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card className={business.google_calendar_connected ? "border-green-200 bg-green-50" : ""}>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            Google Calendar
+          </CardTitle>
+          <CardDescription>
+            Connect Google Calendar to automatically create events when appointments are booked by your AI.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {business.google_calendar_connected ? (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 bg-green-500 rounded-full" />
+                <span className="text-sm font-medium text-green-700">Connected</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={disconnectGoogleCalendar}
+                className="gap-2 text-red-600 hover:text-red-700"
+              >
+                <Unlink className="h-4 w-4" />
+                Disconnect
+              </Button>
+            </div>
+          ) : (
+            <Button
+              onClick={connectGoogleCalendar}
+              disabled={connectingGoogle}
+              className="gap-2"
+              variant="outline"
+            >
+              <Link2 className="h-4 w-4" />
+              {connectingGoogle ? "Connecting..." : "Connect Google Calendar"}
+            </Button>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

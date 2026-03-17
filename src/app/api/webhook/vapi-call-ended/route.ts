@@ -3,6 +3,7 @@ import { createSupabaseAdmin } from "@/lib/supabase/admin";
 import { extractCallData } from "@/lib/openai/extract-call-data";
 import { sendSMS } from "@/lib/twilio/send-sms";
 import { sendCallSummaryEmail } from "@/lib/resend/client";
+import { createCalendarEvent } from "@/lib/google/calendar";
 import { VapiWebhookPayload } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -69,12 +70,32 @@ export async function POST(req: NextRequest) {
       callDurationSeconds = Math.floor((endTime - startTime) / 1000);
     }
 
-    // Parse appointment datetime if provided
+    // Parse appointment datetime using OpenAI if preference is mentioned
     let appointmentDatetime: string | null = null;
     if (extractedData.appointmentPreference) {
-      // For now, store as null - would need more sophisticated date parsing
-      // Could use a library like chrono-node or send to GPT for parsing
-      appointmentDatetime = null;
+      try {
+        const { default: OpenAI } = await import("openai");
+        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+        const now = new Date().toISOString();
+        const parseRes = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          response_format: { type: "json_object" },
+          messages: [
+            {
+              role: "system",
+              content: `Parse the appointment preference into an ISO 8601 datetime string. Current datetime: ${now}. If the preference is vague like "tomorrow morning", pick a reasonable time (e.g., 9:00 AM). If you cannot determine a date, return null. Return JSON: { "datetime": "ISO string or null" }`,
+            },
+            {
+              role: "user",
+              content: extractedData.appointmentPreference,
+            },
+          ],
+        });
+        const parsed = JSON.parse(parseRes.choices[0]?.message?.content || "{}");
+        appointmentDatetime = parsed.datetime || null;
+      } catch (parseError) {
+        console.error("Failed to parse appointment datetime:", parseError);
+      }
     }
 
     // Store call in database
@@ -162,6 +183,71 @@ View: ${dashboardUrl}`;
           .from("calls")
           .update({ email_sent: true })
           .eq("id", callRecord.id);
+      }
+    }
+
+    // Create appointment record if one was requested and we have a datetime
+    if (extractedData.appointmentRequested && appointmentDatetime) {
+      try {
+        const durationMinutes = 30;
+        const startDate = new Date(appointmentDatetime);
+        const endDate = new Date(startDate.getTime() + durationMinutes * 60 * 1000);
+
+        const { data: appointment, error: apptError } = await supabase
+          .from("appointments")
+          .insert({
+            business_id: business.id,
+            call_id: callRecord.id,
+            customer_name: extractedData.callerName,
+            customer_phone: call.customer?.number || null,
+            customer_email: extractedData.callerEmail,
+            appointment_date: appointmentDatetime,
+            duration_minutes: durationMinutes,
+            service_requested: extractedData.callerNeed,
+            notes: extractedData.summary,
+            status: "pending",
+          })
+          .select()
+          .single();
+
+        if (apptError) {
+          console.error("Failed to create appointment:", apptError);
+        } else {
+          console.log(`Appointment created: ${appointment.id}`);
+
+          // Sync to Google Calendar if connected
+          if (business.google_calendar_connected && business.google_refresh_token) {
+            try {
+              const calendarEvent = await createCalendarEvent(
+                business.google_refresh_token,
+                business.google_calendar_id || "primary",
+                {
+                  summary: `${extractedData.callerName || "Customer"} - ${extractedData.callerNeed || "Appointment"}`,
+                  description: `Booked via AI receptionist call\n\nCaller: ${extractedData.callerName || "Unknown"}\nPhone: ${call.customer?.number || "N/A"}\nNeed: ${extractedData.callerNeed || "N/A"}\n\nSummary: ${extractedData.summary}`,
+                  startDateTime: startDate.toISOString(),
+                  endDateTime: endDate.toISOString(),
+                  attendeeEmail: extractedData.callerEmail || undefined,
+                }
+              );
+
+              // Update appointment with Google event ID
+              await supabase
+                .from("appointments")
+                .update({
+                  google_event_id: calendarEvent.id,
+                  google_calendar_synced: true,
+                  status: "confirmed",
+                })
+                .eq("id", appointment.id);
+
+              console.log(`Google Calendar event created: ${calendarEvent.id}`);
+            } catch (calError) {
+              console.error("Failed to create Google Calendar event:", calError);
+            }
+          }
+        }
+      } catch (apptError) {
+        console.error("Failed to process appointment:", apptError);
       }
     }
 

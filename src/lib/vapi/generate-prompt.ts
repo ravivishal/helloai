@@ -1,4 +1,4 @@
-import { Business, BusinessHours, FAQItem } from "@/types";
+import { Business, BusinessHours, FAQItem, KnowledgeBaseEntry } from "@/types";
 import { format } from "date-fns";
 
 function formatBusinessHours(hours: BusinessHours): string {
@@ -28,7 +28,27 @@ function formatFAQ(faq: FAQItem[]): string {
     .join("\n\n");
 }
 
-export function generateAssistantPrompt(business: Business): string {
+function formatKnowledgeBase(entries: KnowledgeBaseEntry[]): string {
+  if (!entries || entries.length === 0) return "";
+
+  const grouped: Record<string, KnowledgeBaseEntry[]> = {};
+  for (const entry of entries) {
+    const cat = entry.category || "general";
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(entry);
+  }
+
+  let result = "## KNOWLEDGE BASE\nUse the following information to answer caller questions accurately:\n\n";
+  for (const [category, items] of Object.entries(grouped)) {
+    result += `### ${category.charAt(0).toUpperCase() + category.slice(1)}\n`;
+    for (const item of items) {
+      result += `Q: ${item.question}\nA: ${item.answer}\n\n`;
+    }
+  }
+  return result;
+}
+
+export function generateAssistantPrompt(business: Business, knowledgeBaseEntries?: KnowledgeBaseEntry[]): string {
   const now = new Date();
   const currentDay = format(now, "EEEE");
   const currentTime = format(now, "h:mm a");
@@ -68,6 +88,8 @@ ${business.booking_url ? `## BOOKING\nIf the caller wants to book an appointment
 
 ## FREQUENTLY ASKED QUESTIONS
 ${formatFAQ(business.faq)}
+
+${knowledgeBaseEntries && knowledgeBaseEntries.length > 0 ? formatKnowledgeBase(knowledgeBaseEntries) : ""}
 
 ${business.custom_instructions ? `## ADDITIONAL INSTRUCTIONS FROM ${business.owner_name.toUpperCase()}\n${business.custom_instructions}` : ""}
 

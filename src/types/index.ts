@@ -1,9 +1,12 @@
+export type UserRole = "user" | "admin" | "superadmin";
+
 export interface User {
   id: string;
   auth_id: string;
   email: string;
   full_name: string | null;
   phone: string | null;
+  role: UserRole;
   created_at: string;
   updated_at: string;
 }
@@ -37,6 +40,9 @@ export interface Business {
   billing_cycle_start: string;
   is_active: boolean;
   setup_completed: boolean;
+  google_calendar_connected: boolean;
+  google_refresh_token: string | null;
+  google_calendar_id: string;
   created_at: string;
   updated_at: string;
 }
@@ -114,6 +120,37 @@ export interface Plan {
   features: string[];
   is_active: boolean;
 }
+
+export interface KnowledgeBaseEntry {
+  id: string;
+  business_id: string;
+  category: string;
+  question: string;
+  answer: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Appointment {
+  id: string;
+  business_id: string;
+  call_id: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+  customer_email: string | null;
+  appointment_date: string;
+  duration_minutes: number;
+  service_requested: string | null;
+  notes: string | null;
+  status: AppointmentStatus;
+  google_event_id: string | null;
+  google_calendar_synced: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
 
 export interface BusinessTemplate {
   id: string;

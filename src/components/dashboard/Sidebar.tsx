@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Phone, Settings, CreditCard } from "lucide-react";
+import { LayoutDashboard, Phone, Settings, CreditCard, BookOpen, Calendar, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
@@ -22,6 +23,16 @@ const navItems = [
     icon: Phone,
   },
   {
+    label: "Knowledge Base",
+    href: "/knowledge-base",
+    icon: BookOpen,
+  },
+  {
+    label: "Appointments",
+    href: "/appointments",
+    icon: Calendar,
+  },
+  {
     label: "Settings",
     href: "/settings",
     icon: Settings,
@@ -35,6 +46,18 @@ const navItems = [
 
 export function Sidebar({ businessName }: SidebarProps) {
   const pathname = usePathname();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((user) => {
+        if (user.role === "admin" || user.role === "superadmin") {
+          setIsAdmin(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="flex h-full flex-col bg-white border-r">
@@ -79,6 +102,22 @@ export function Sidebar({ businessName }: SidebarProps) {
           );
         })}
       </nav>
+
+      {/* Admin Link */}
+      {isAdmin && (
+        <>
+          <Separator />
+          <div className="p-4">
+            <Link
+              href="/admin"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+            >
+              <Shield className="h-5 w-5" />
+              Admin Panel
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }

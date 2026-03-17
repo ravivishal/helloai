@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
 const publicRoutes = [
@@ -7,12 +8,17 @@ const publicRoutes = [
   "/sign-up",
   "/api/webhook",
   "/api/cron",
+  "/api/google/callback",
 ];
 
 function isPublicRoute(pathname: string) {
   return publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
+}
+
+function isAdminRoute(pathname: string) {
+  return pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
 }
 
 export async function middleware(request: NextRequest) {
@@ -57,6 +63,30 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
+  }
+
+  // Admin route protection: check role from DB
+  // Allow /admin/setup and /api/admin/setup for any authenticated user (first-time setup)
+  const isSetupRoute =
+    pathname === "/admin/setup" || pathname === "/api/admin/setup";
+
+  if (user && isAdminRoute(pathname) && !isSetupRoute) {
+    const adminSupabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
+    const { data: dbUser } = await adminSupabase
+      .from("users")
+      .select("role")
+      .eq("auth_id", user.id)
+      .single();
+
+    if (!dbUser || (dbUser.role !== "admin" && dbUser.role !== "superadmin")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

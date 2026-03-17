@@ -1,6 +1,7 @@
-import { Business } from "@/types";
+import { Business, KnowledgeBaseEntry } from "@/types";
 import { vapiRequest } from "./client";
 import { generateAssistantPrompt, generateFirstMessage } from "./generate-prompt";
+import { createSupabaseAdmin } from "@/lib/supabase/admin";
 
 interface VapiAssistant {
   id: string;
@@ -10,7 +11,15 @@ interface VapiAssistant {
 export async function createVapiAssistant(
   business: Business
 ): Promise<VapiAssistant> {
-  const systemPrompt = generateAssistantPrompt(business);
+  // Fetch knowledge base entries for this business
+  const supabase = createSupabaseAdmin();
+  const { data: kbEntries } = await supabase
+    .from("knowledge_base_entries")
+    .select("*")
+    .eq("business_id", business.id)
+    .eq("is_active", true);
+
+  const systemPrompt = generateAssistantPrompt(business, (kbEntries as KnowledgeBaseEntry[]) || []);
   const firstMessage = generateFirstMessage(business);
 
   const assistant = await vapiRequest<VapiAssistant>("/assistant", {
